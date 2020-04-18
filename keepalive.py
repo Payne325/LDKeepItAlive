@@ -40,32 +40,44 @@ print("Game Objects created!")
 print("Commence funtime...")
 
 floor_height = 0
+player_alive = True
 
-while engine.IsWindowOpen():
+while engine.IsWindowOpen() and player_alive:
    dt = engine.Update()
 
    # todo: update spawner -> spawn new asteroid if needed
 
    # todo: update all asteroid positions
    asteroid.update_position(dt)
-
-   player.handle_input()
    player.update_position(dt)
+   
 
    # todo: implement the following
    # detect collisions 
-      # if player and asteroid collide
-         # player dies -> game ends/life lost (?)
+   if player.has_collided_with(asteroid):
+      if asteroid.can_hurt_player():
+         print("You died!")
+         player_alive = False
+         continue
+      #else:
+         # Player can't go past the asteroid, so alter the velocity. 
+         # Either need to stop him walking through the asteroid
+         # Or stop him falling through it
 
-      #if falling asteroid and stopped asteroid collide
-         # falling asteroid stops movement and replaces texture
+   #if falling asteroid and stopped asteroid collide
+      # falling asteroid stops movement and replaces texture
 
-      # if asteroid and exit portal collide
-         # delete asteroid
+   # if asteroid and exit portal collide
+      # delete asteroid
 
-      # if player and exit portal collide
-         # reset game
-         # increment level counter
-         # up difficulty somehow (more asteroids, faster asteroids, bigger 'tall enough' value?) 
+   # if player and exit portal collide
+      # reset game
+      # increment level counter
+      # up difficulty somehow (more asteroids, faster asteroids, bigger 'tall enough' value?) 
 
+   player.update_sprite()
+   asteroid.update_sprite()
    engine.Draw()
+
+
+# Add some code to tidy up all memory if needed

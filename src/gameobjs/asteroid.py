@@ -27,11 +27,18 @@ class Asteroid:
 
          if self.pos.y < self.floor_height:
             self.pos.y = self.floor_height
-            self.falling_sprite.SetDrawable(False)
-            self.falling = False
+            self.falling = False    
 
+   def update_sprite(self):
+      if self.falling:
          self.falling_sprite.SetPosition(Vector3(self.pos.x * 32, self.pos.y * 32, 1.0))
-
-      if self.falling == False:
+      else:
+         self.falling_sprite.SetDrawable(False)
          self.stopped_sprite.SetDrawable(True)
          self.stopped_sprite.SetPosition(Vector3(self.pos.x * 32, self.pos.y * 32, 1.0))
+
+   def can_hurt_player(self):
+      return self.falling
+
+   def get_position(self):
+      return self.pos
