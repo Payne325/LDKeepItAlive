@@ -51,7 +51,6 @@ while engine.IsWindowOpen() and player_alive:
    asteroid.update_position(dt)
    player.update_position(dt)
    
-
    # todo: implement the following
    # detect collisions 
    if player.has_collided_with(asteroid):
@@ -59,10 +58,8 @@ while engine.IsWindowOpen() and player_alive:
          print("You died!")
          player_alive = False
          continue
-      #else:
-         # Player can't go past the asteroid, so alter the velocity. 
-         # Either need to stop him walking through the asteroid
-         # Or stop him falling through it
+      else:
+         player.place_next_to_collision(asteroid)
 
    #if falling asteroid and stopped asteroid collide
       # falling asteroid stops movement and replaces texture
@@ -78,6 +75,5 @@ while engine.IsWindowOpen() and player_alive:
    player.update_sprite()
    asteroid.update_sprite()
    engine.Draw()
-
 
 # Add some code to tidy up all memory if needed

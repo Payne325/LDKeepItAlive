@@ -9,11 +9,11 @@ class Asteroid:
       self.floor_height = 0
       self.falling = True
 
-      falling_spriteID = engine.CreateTexture("assets/sprites/asteroid.png", Vector2(0, 0), Vector2(512, 512))
+      falling_spriteID = engine.CreateTexture("assets/sprites/asteroid.png", Vector2(0, 0), Vector2(32, 32))
       self.falling_sprite = engine.CreateSprite(Vector3(0, 0, 1.0), Vector2(32 ,32), falling_spriteID)
       self.falling_sprite.SetDrawable(True)
 
-      stopped_spriteID = engine.CreateTexture("assets/sprites/asteroid_broken.png", Vector2(0, 0), Vector2(512, 512))
+      stopped_spriteID = engine.CreateTexture("assets/sprites/asteroid_broken.png", Vector2(0, 0), Vector2(32, 32))
       self.stopped_sprite = engine.CreateSprite(Vector3(0, 0, 1.0), Vector2(32 ,32), stopped_spriteID)
       self.stopped_sprite.SetDrawable(False)
 

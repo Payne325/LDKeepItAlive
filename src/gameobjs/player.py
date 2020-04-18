@@ -6,8 +6,8 @@ class Player:
       self.engine = engine
       self.pos = Vector3(0.0, 0.0, 0.0)
 
-      spriteID = engine.CreateTexture("assets/sprites/player.png", Vector2(0, 0), Vector2(512, 512))
-      self.sprite = engine.CreateSprite(Vector3(0, 0, 1.0), Vector2(32 ,32), spriteID)
+      spriteID = engine.CreateTexture("assets/sprites/player.png", Vector2(0, 0), Vector2(32, 64))
+      self.sprite = engine.CreateSprite(Vector3(0, 0, 1.0), Vector2(32 ,64), spriteID)
       self.sprite.SetDrawable(True)
 
       self.jump_force = 0
@@ -16,6 +16,7 @@ class Player:
       self.jumping = False
       self.move_left = False
       self.move_right = False
+      self.vel = Vector3(0.0, 0.0, 0.0)
 
       print("Player initialised")
 
@@ -27,32 +28,37 @@ class Player:
 
    def update_position(self, dt):
       speedModifier = 10 * dt
-      vel = Vector3(0.0, 0.0, 0.0)
+      self.vel = Vector3(0.0, 0.0, 0.0)
 
       if self.engine.IsKeyDown(INJAN_KEY_UP):
          if self.jumping == False:
             self.jumping = True
             self.jump_force = 20
 
+      falling_force = 0
       if self.jumping:
-         total_jump_force = self.jump_force * dt
+         falling_force = self.jump_force * dt
          self.jump_force -= self.weight
 
-         vel.y = total_jump_force
+      elif self.pos.y > self.floor_height: # if falling but not ending jump animation
+         falling_force -= self.weight * dt
+
+      self.vel.y = falling_force
 
       if self.engine.IsKeyDown(INJAN_KEY_LEFT):
          self.move_right = False
          self.move_left = True
-         vel.x -= 1 * speedModifier
+         self.vel.x -= 1 * speedModifier
 
       if self.engine.IsKeyDown(INJAN_KEY_RIGHT):
          self.move_left = False
          self.move_right = True
-         vel.x += 1 * speedModifier
+         self.vel.x += 1 * speedModifier
 
-      self.pos += vel
+      self.pos += self.vel
 
-      if self.jumping and self.pos.y <= self.floor_height:
+      # ensure we don't clip through the floor
+      if self.pos.y <= self.floor_height:
          self.jumping = False
          self.pos.y = self.floor_height
 
@@ -62,4 +68,10 @@ class Player:
       diffX = abs(self.pos.x - asteroidPos.x)
       diffY = abs(self.pos.y - asteroidPos.y)
 
-      return diffX < 0.5 and diffY < 0.5
+      return diffX < 0.9 and diffY < 0.9
+
+   def place_next_to_collision(self, asteroid):
+      vecBetween = self.pos - asteroid.get_position()
+      vecBetween = vecBetween.get_normalised()
+      
+      self.pos += vecBetween
