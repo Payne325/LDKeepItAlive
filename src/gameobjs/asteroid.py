@@ -31,11 +31,11 @@ class Asteroid:
 
    def update_sprite(self):
       if self.falling:
-         self.falling_sprite.SetPosition(Vector3(self.pos.x, self.pos.y + 16, 1.0))
+         self.falling_sprite.SetPosition(Vector3(self.pos.x + 16, self.pos.y + 16, 1.0))
       else:
          self.falling_sprite.SetDrawable(False)
          self.stopped_sprite.SetDrawable(True)
-         self.stopped_sprite.SetPosition(Vector3(self.pos.x, self.pos.y + 16, 1.0))
+         self.stopped_sprite.SetPosition(Vector3(self.pos.x + 16, self.pos.y + 16, 1.0))
 
    def can_hurt_player(self):
       return self.falling
