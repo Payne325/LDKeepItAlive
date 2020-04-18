@@ -5,7 +5,6 @@ from src.Injan import Injan
 from src.InjanStructures import Vector2, Vector3
 from src.InjanKeycodes import *
 
-
 print("Loading Engine...")
 
 engine = Injan()

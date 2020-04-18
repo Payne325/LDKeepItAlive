@@ -7,7 +7,8 @@ class Player:
       self.pos = Vector3(0.0, 0.0, 0.0)
 
       spriteID = engine.CreateTexture("assets/sprites/player.png", Vector2(0, 0), Vector2(512, 512))
-      self.playerSprite = engine.CreateSprite(Vector3(0, 0, 1.0), Vector2(32 ,32), spriteID)
+      self.sprite = engine.CreateSprite(Vector3(0, 0, 1.0), Vector2(32 ,32), spriteID)
+      self.sprite.SetDrawable(True)
 
       self.jump_force = 0
       self.weight = 2.0
@@ -45,7 +46,7 @@ class Player:
          self.jumping = False
          self.pos.y = self.floor_height
       
-      self.playerSprite.SetPosition(Vector3(self.pos.x * 32, self.pos.y * 32, 1.0))
+      self.sprite.SetPosition(Vector3(self.pos.x * 32, self.pos.y * 32, 1.0))
 
    def handle_input(self):
       if self.engine.IsKeyDown(INJAN_KEY_UP):

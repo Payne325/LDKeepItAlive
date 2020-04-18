@@ -9,6 +9,9 @@ class Sprite:
    def Move(self, vector):
       self.injan.MoveSprite(self.id, vector)
 
+   def SetDrawable(self, b):
+      self.injan.SetSpriteDrawable(self.id, b)
+
    def GetID(self):
       return self.id
 

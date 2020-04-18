@@ -23,6 +23,7 @@ class Injan:
          self.createSprite = self.injanDLL.CreateSprite
          self.setSpritePosition = self.injanDLL.SetSpritePosition
          self.moveSprite  = self.injanDLL.MoveSprite
+         self.setSpriteDrawable = self.injanDLL.SetSpriteDrawable
          self.createTileMap = self.injanDLL.CreateTileMap
          self.setTileMapSpriteAll = self.injanDLL.SetTileMapSpriteAll
          self.setTileMapSprite = self.injanDLL.SetTileMapSprite
@@ -38,14 +39,15 @@ class Injan:
          self.moveCamera.argtypes = [ctypes.c_int, Vector3]
          self.createTexture.argtypes = [ctypes.c_char_p, Vector2, Vector2]
          self.createSprite.argtypes = [Vector3, Vector2, ctypes.c_int]
-         self.setSpritePosition.argtype = [ctypes.c_int, Vector3]
-         self.moveSprite.argtype = [ctypes.c_int, Vector3]
-         self.createTileMap.argtype = [ctypes.c_int, Vector3, Vector2, Vector2]
-         self.setTileMapSprite.argtype = [ctypes.c_int, ctypes.c_int, Vector2]
-         self.setTileMapObstacle.argtype = [ctypes.c_int, ctypes.c_bool, Vector2]
-         self.createPathfinder.argtype = [ctypes.c_int]
-         self.findPath.argtype = [Vector2, Vector2]
-         self.getPathPointAt.argtype = [Array, ctypes.c_int]
+         self.setSpritePosition.argtypes = [ctypes.c_int, Vector3]
+         self.moveSprite.argtypes = [ctypes.c_int, Vector3]
+         self.setSpriteDrawable.argtypes = [ctypes.c_int, ctypes.c_bool]
+         self.createTileMap.argtypes = [Vector3, Vector2, Vector2]
+         self.setTileMapSprite.argtypes = [ctypes.c_int, ctypes.c_int, Vector2]
+         self.setTileMapObstacle.argtypes = [ctypes.c_int, ctypes.c_bool, Vector2]
+         self.createPathfinder.argtypes = [ctypes.c_int]
+         self.findPath.argtypes = [ctypes.c_int, Vector2, Vector2]
+         self.getPathPointAt.argtypes = [Array, ctypes.c_int]
 
          self.update.restype = ctypes.c_double
          self.createPerspectiveCamera.restype = ctypes.c_int
@@ -155,18 +157,25 @@ class Injan:
       return Sprite(self, spriteID)
 
 
-   # CreateTexture Function
+   # SetSpritePosition Function
    def SetSpritePosition(self, sprite, pos):
       if self.loaded == False: return
 
       self.setSpritePosition(sprite, pos)
 
 
-   # CreateSprite Function
+   # MoveSprite Function
    def MoveSprite(self, sprite, vec):
       if self.loaded == False: return
 
       self.moveSprite(sprite, vec)
+
+
+   # SetSpriteDrawable Function
+   def SetSpriteDrawable(self, sprite, b):
+      if self.loaded == False: return
+
+      self.setSpriteDrawable(sprite, b)
 
 
    # CreateTileMap Function
