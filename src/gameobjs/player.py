@@ -7,8 +7,12 @@ class Player:
       self.pos = Vector3(0.0, 0.0, 0.0)
 
       spriteID = engine.CreateTexture("assets/sprites/player.png", Vector2(0, 0), Vector2(32, 64))
+      spriteID2 = engine.CreateTexture("assets/sprites/player2.png", Vector2(0, 0), Vector2(32, 64))
       self.sprite = engine.CreateSprite(Vector3(0, 32, 1.0), Vector2(32 ,64), spriteID)
       self.sprite.SetDrawable(True)
+
+      self.sprite2 = engine.CreateSprite(Vector3(0, 32, 1.0), Vector2(32 ,64), spriteID2)
+      self.sprite2.SetDrawable(False)
 
       self.jump_force = 0
       self.weight = 64.0
@@ -25,6 +29,7 @@ class Player:
 
    def update_sprite(self):
       self.sprite.SetPosition(Vector3(self.pos.x, self.pos.y + 16, 1.0))
+      self.sprite2.SetPosition(Vector3(self.pos.x, self.pos.y + 16, 1.0))
 
    def update_position(self, dt):
       speedModifier = 100 * dt
@@ -50,11 +55,15 @@ class Player:
          self.move_right = False
          self.move_left = True
          self.vel.x -= 1 * speedModifier
+         self.sprite2.SetDrawable(True)
+         self.sprite.SetDrawable(False)
 
       if self.engine.IsKeyDown(INJAN_KEY_RIGHT):
          self.move_left = False
          self.move_right = True
          self.vel.x += 1 * speedModifier
+         self.sprite2.SetDrawable(False)
+         self.sprite.SetDrawable(True)
 
       self.pos += self.vel
 
