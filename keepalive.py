@@ -1,115 +1,64 @@
 import sys, platform, random
+from src.gameobjs.player import Player
 from src.Injan import Injan
 from src.InjanStructures import Vector2, Vector3
 from src.InjanKeycodes import *
 
 
-print("Initialising.")
+print("Loading Engine...")
 
-injan = Injan()
-injan.Initialise()
+engine = Injan()
+engine.Initialise()
 
-camera = injan.CreateOrthographicCamera(-1.0, 1.0)
+print("Engine Loaded!")
+
+print("Setting up Camera...")
+
+camera = engine.CreateOrthographicCamera(-1.0, 1.0)
 camera.Move(Vector3(-50, -50, 0))
 cameraX = 0
 cameraY = 0
 cameraZ = 0
 
-box = injan.CreateTexture("assets/sprites/container.jpg", Vector2(0, 0), Vector2(512, 512))
-grass = injan.CreateTexture("assets/sprites/grass.jpg", Vector2(0, 0), Vector2(512, 512))
-player = injan.CreateTexture("assets/sprites/player.png", Vector2(0, 0), Vector2(512, 512))
+print("Camera Setup Complete!")
 
-playerSprite = injan.CreateSprite(Vector3(0, 0, 1.0), Vector2(32 ,32), player)
+print("Create Background...")
+#Set background
+print("Background created!")
 
-sprites = []
+print("Creating Game Objects...")
 
-for i in range(0, 100):
-   sprites.append(injan.CreateSprite(Vector3(0, 0, 0), Vector2(32, 32), grass))
+player = Player(engine)
 
-tilemap = injan.CreateTileMap(Vector3(0, 0, 0.5), Vector2(10, 10), Vector2(32, 32))
+print("Game Objects created!")
 
-count = 0
-for i in range(0, 10):
-   for j in range(0, 10):
-      injan.SetTileMapSprite(tilemap, sprites[count].GetID(), Vector2(i, j))
-      count += 1
+print("Commence funtime...")
 
-obstacleList = [Vector2(1, 0), Vector2(1, 1), Vector2(2, 1), Vector2(3, 1)]
-boxSprites = []
+timer = 0
 
-for i in range(0, 4):
-   boxSprites.append(injan.CreateSprite(Vector3(0, 0, 1.0), Vector2(32, 32), box))
-
-
-for i in range(0, len(obstacleList)):
-   injan.SetTileMapSprite(tilemap, boxSprites[i].GetID(), obstacleList[i])
-   injan.SetTileMapObstacle(tilemap, True, obstacleList[i])
-
-
-pathfinder = injan.CreatePathfinder(tilemap)
-path = pathfinder.FindPath(Vector2(0, 0), Vector2(2, 0))
-pathlength = path.GetPathLength()
-
-print("Path length = " + str(pathlength))
-
-currPos = 0
-timer = -3
-
-for i in range(0, pathlength):
-   vec = path.GetPoint(i)
-   print(vec)
-
-while injan.IsWindowOpen():
-   dt = injan.Update()
-   injan.Draw()
-
+while engine.IsWindowOpen():
+   dt = engine.Update()
    timer += dt
 
-   # CAMERA CONTROLS
+   # Player CONTROL Update
 
-   speed = Vector3(0, 0, 0)
+   vel = Vector3(0, 0, 0)
    speedModifier = 100 * dt
-   
-   if injan.IsKeyDown(INJAN_KEY_LEFT_SHIFT):
-      speedModifier *= 2
 
-   if injan.IsKeyDown(INJAN_KEY_W):
-      speed.y += 1 * speedModifier
+   if engine.IsKeyDown(INJAN_KEY_UP):
+      vel.y += 1 * speedModifier
 
-   if injan.IsKeyDown(INJAN_KEY_A):
-      speed.x -= 1 * speedModifier
+   if engine.IsKeyDown(INJAN_KEY_LEFT):
+      vel.x -= 1 * speedModifier
 
-   if injan.IsKeyDown(INJAN_KEY_S):
-      speed.y -= 1 * speedModifier
+   if engine.IsKeyDown(INJAN_KEY_DOWN):
+      vel.y -= 1 * speedModifier
 
-   if injan.IsKeyDown(INJAN_KEY_D):
-      speed.x += 1 * speedModifier
+   if engine.IsKeyDown(INJAN_KEY_RIGHT):
+      vel.x += 1 * speedModifier
 
-   camera.Move(speed)
+   # Player Position update
+   player.set_vel(vel)
 
-
-   # SPRITE CONTROLS
-
-   speed = Vector3(0, 0, 0)
-
-   if injan.IsKeyDown(INJAN_KEY_UP):
-      speed.y += 1 * speedModifier
-
-   if injan.IsKeyDown(INJAN_KEY_LEFT):
-      speed.x -= 1 * speedModifier
-
-   if injan.IsKeyDown(INJAN_KEY_DOWN):
-      speed.y -= 1 * speedModifier
-
-   if injan.IsKeyDown(INJAN_KEY_RIGHT):
-      speed.x += 1 * speedModifier
-
-   if timer > 1 and currPos != pathlength - 1:
-      timer = 0
-      currPos += 1
-
-      pos = path.GetPoint(currPos)
-      playerSprite.SetPosition(Vector3(pos.x * 32, pos.y * 32, 1.0))
-
-injan.CleanUp()
-print("Exiting.")
+    #Final Draw
+   engine.Draw()
