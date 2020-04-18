@@ -14,9 +14,11 @@ camera.Move(Vector3(-50, -50, 0))
 cameraX = 0
 cameraY = 0
 cameraZ = 0
+
 box = injan.CreateTexture("assets/sprites/container.jpg", Vector2(0, 0), Vector2(512, 512))
 grass = injan.CreateTexture("assets/sprites/grass.jpg", Vector2(0, 0), Vector2(512, 512))
 player = injan.CreateTexture("assets/sprites/player.png", Vector2(0, 0), Vector2(512, 512))
+
 playerSprite = injan.CreateSprite(Vector3(0, 0, 1.0), Vector2(32 ,32), player)
 
 sprites = []
