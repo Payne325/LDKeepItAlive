@@ -1,13 +1,13 @@
 import ctypes
-from InjanStructures import Vector2, Vector3, Array
-from InjanCamera import Camera
-from InjanSprite import Sprite
-from InjanPathfinder import Pathfinder, Path
+from src.InjanStructures import Vector2, Vector3, Array
+from src.InjanCamera import Camera
+from src.InjanSprite import Sprite
+from src.InjanPathfinder import Pathfinder, Path
 
 class Injan:
    def __init__(self):
       try:
-         self.injanDLL = ctypes.cdll.LoadLibrary("../x64/Release/Injan")
+         self.injanDLL = ctypes.cdll.LoadLibrary("engine/Injan")
          
          self.initialise = self.injanDLL.Initialise
          self.isWindowOpen = self.injanDLL.IsWindowOpen

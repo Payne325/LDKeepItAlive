@@ -1,4 +1,4 @@
-from InjanStructures import Vector2
+from src.InjanStructures import Vector2
 
 class Pathfinder:
    def __init__(self, injan, id):
