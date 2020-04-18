@@ -1,113 +1,83 @@
 import sys, platform, random
+from src.gameobjs.player import Player
+from src.gameobjs.asteroid import Asteroid
 from src.Injan import Injan
 from src.InjanStructures import Vector2, Vector3
 from src.InjanKeycodes import *
 
+print("Loading Engine...")
 
-print("Initialising.")
+engine = Injan()
+engine.Initialise()
 
-injan = Injan()
-injan.Initialise()
-# cameraID = injan.CreatePerspectiveCamera(45, 0.1, 1000.0)
-camera = injan.CreateOrthographicCamera(-1.0, 1.0)
+print("Engine Loaded!")
+
+print("Setting up Camera...")
+
+camera = engine.CreateOrthographicCamera(-1.0, 1.0)
 camera.Move(Vector3(-50, -50, 0))
 cameraX = 0
 cameraY = 0
 cameraZ = 0
-box = injan.CreateTexture("Images/container.jpg", Vector2(0, 0), Vector2(512, 512))
-grass = injan.CreateTexture("Images/grass.jpg", Vector2(0, 0), Vector2(512, 512))
-player = injan.CreateTexture("Images/player.png", Vector2(0, 0), Vector2(512, 512))
-playerSprite = injan.CreateSprite(Vector3(0, 0, 1.0), Vector2(32 ,32), player)
 
-sprites = []
+print("Camera Setup Complete!")
 
-for i in range(0, 100):
-   sprites.append(injan.CreateSprite(Vector3(0, 0, 0), Vector2(32, 32), grass))
+#print("Create Background...")
+#todo Set background
+#print("Background created!")
 
-tilemap = injan.CreateTileMap(Vector3(0, 0, 0.5), Vector2(10, 10), Vector2(32, 32))
+print("Creating Game Objects...")
 
-count = 0
-for i in range(0, 10):
-   for j in range(0, 10):
-      injan.SetTileMapSprite(tilemap, sprites[count].GetID(), Vector2(i, j))
-      count += 1
+player = Player(engine)
 
-obstacleList = [Vector2(1, 0), Vector2(1, 1), Vector2(2, 1), Vector2(3, 1)]
-boxSprites = []
+#temporary, just to test asteroids move correctly. spawner will construct this eventually
+asteroid = Asteroid(engine, pos=Vector3(10.0, 15.0, 0.0), weight=4)
 
-for i in range(0, 4):
-   boxSprites.append(injan.CreateSprite(Vector3(0, 0, 1.0), Vector2(32, 32), box))
+#todo create asteroid/exit portal spawner here
 
+print("Game Objects created!")
 
-for i in range(0, len(obstacleList)):
-   injan.SetTileMapSprite(tilemap, boxSprites[i].GetID(), obstacleList[i])
-   injan.SetTileMapObstacle(tilemap, True, obstacleList[i])
+print("Commence funtime...")
 
+floor_height = 0
+player_alive = True
 
-pathfinder = injan.CreatePathfinder(tilemap)
-path = pathfinder.FindPath(Vector2(0, 0), Vector2(2, 0))
-pathlength = path.GetPathLength()
+while engine.IsWindowOpen() and player_alive:
+   dt = engine.Update()
 
-print("Path length = " + str(pathlength))
+   # todo: update spawner -> spawn new asteroid if needed
 
-currPos = 0
-timer = -3
-
-for i in range(0, pathlength):
-   vec = path.GetPoint(i)
-   print(vec)
-
-while injan.IsWindowOpen():
-   dt = injan.Update()
-   injan.Draw()
-
-   timer += dt
-
-   # CAMERA CONTROLS
-
-   speed = Vector3(0, 0, 0)
-   speedModifier = 100 * dt
+   # todo: update all asteroid positions
+   asteroid.update_position(dt)
+   player.update_position(dt)
    
-   if injan.IsKeyDown(INJAN_KEY_LEFT_SHIFT):
-      speedModifier *= 2
 
-   if injan.IsKeyDown(INJAN_KEY_W):
-      speed.y += 1 * speedModifier
+   # todo: implement the following
+   # detect collisions 
+   if player.has_collided_with(asteroid):
+      if asteroid.can_hurt_player():
+         print("You died!")
+         player_alive = False
+         continue
+      #else:
+         # Player can't go past the asteroid, so alter the velocity. 
+         # Either need to stop him walking through the asteroid
+         # Or stop him falling through it
 
-   if injan.IsKeyDown(INJAN_KEY_A):
-      speed.x -= 1 * speedModifier
+   #if falling asteroid and stopped asteroid collide
+      # falling asteroid stops movement and replaces texture
 
-   if injan.IsKeyDown(INJAN_KEY_S):
-      speed.y -= 1 * speedModifier
+   # if asteroid and exit portal collide
+      # delete asteroid
 
-   if injan.IsKeyDown(INJAN_KEY_D):
-      speed.x += 1 * speedModifier
+   # if player and exit portal collide
+      # reset game
+      # increment level counter
+      # up difficulty somehow (more asteroids, faster asteroids, bigger 'tall enough' value?) 
 
-   camera.Move(speed)
+   player.update_sprite()
+   asteroid.update_sprite()
+   engine.Draw()
 
 
-   # SPRITE CONTROLS
-
-   speed = Vector3(0, 0, 0)
-
-   if injan.IsKeyDown(INJAN_KEY_UP):
-      speed.y += 1 * speedModifier
-
-   if injan.IsKeyDown(INJAN_KEY_LEFT):
-      speed.x -= 1 * speedModifier
-
-   if injan.IsKeyDown(INJAN_KEY_DOWN):
-      speed.y -= 1 * speedModifier
-
-   if injan.IsKeyDown(INJAN_KEY_RIGHT):
-      speed.x += 1 * speedModifier
-
-   if timer > 1 and currPos != pathlength - 1:
-      timer = 0
-      currPos += 1
-
-      pos = path.GetPoint(currPos)
-      playerSprite.SetPosition(Vector3(pos.x * 32, pos.y * 32, 1.0))
-
-injan.CleanUp()
-print("Exiting.")
+# Add some code to tidy up all memory if needed
