@@ -34,6 +34,9 @@ player = Player(engine)
 asteroid1 = Asteroid(engine, pos=Vector3(320.0, 500.0, 0.0), weight=128)
 asteroid2 = Asteroid(engine, pos=Vector3(320.0, 800.0, 0.0), weight=128)
 
+falling_asteroids = [asteroid1, asteroid2]
+stopped_asteroids = []
+
 #todo create asteroid/exit portal spawner here
 
 print("Game Objects created!")
@@ -47,24 +50,41 @@ while engine.IsWindowOpen() and player_alive:
    dt = engine.Update()
 
    # todo: update spawner -> spawn new asteroid if needed
+   new_stopped_asteroids = []
+   for i, asteroid in enumerate(falling_asteroids):
+      asteroid.update_position(dt)
+      
+      if not asteroid.can_hurt_player():
+         new_stopped_asteroids.append(i)
 
-   # todo: update all asteroid positions
-   asteroid1.update_position(dt)
-   asteroid2.update_position(dt)
+   for i in reversed(new_stopped_asteroids):
+      stopped_asteroids.append(falling_asteroids[i])
+      falling_asteroids.pop(i)
+
+   
+
+   new_stopped_asteroids = []
+   for falling_asteroid in falling_asteroids:
+      for i, stopped_asteroid in enumerate(stopped_asteroids):
+         if falling_asteroid.has_collided_with(stopped_asteroid):
+            falling_asteroid.land_above(stopped_asteroid)
+            new_stopped_asteroids.append(i)
+
+   for i in reversed(new_stopped_asteroids):
+      stopped_asteroids.append(falling_asteroids[i])
+      falling_asteroids.pop(i)
+
    player.update_position(dt)
    
-   # todo: implement the following
-   # detect collisions 
-   if player.has_collided_with(asteroid1):
-      if asteroid1.can_hurt_player():
+   for asteroid in falling_asteroids:
+      if player.has_collided_with(asteroid):
          print("You died!")
          player_alive = False
          continue
-      else:
-         player.place_next_to_collision(asteroid1)
-
-   if asteroid2.has_collided_with(asteroid1):
-      asteroid2.land_above(asteroid1)
+   
+   for asteroid in stopped_asteroids:
+      if player.has_collided_with(asteroid):
+         player.place_next_to_collision(asteroid)
 
    # if asteroid and exit portal collide
       # delete asteroid

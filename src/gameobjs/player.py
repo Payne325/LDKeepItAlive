@@ -38,7 +38,7 @@ class Player:
       if self.engine.IsKeyDown(INJAN_KEY_UP):
          if self.jumping == False:
             self.jumping = True
-            self.jump_force = 940
+            self.jump_force = 740
 
       falling_force = 0
       if self.jumping:
