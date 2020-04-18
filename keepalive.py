@@ -40,25 +40,9 @@ while engine.IsWindowOpen():
    dt = engine.Update()
    timer += dt
 
-   # Player CONTROL Update
-
-   vel = Vector3(0, 0, 0)
-   speedModifier = 100 * dt
-
-   if engine.IsKeyDown(INJAN_KEY_UP):
-      vel.y += 1 * speedModifier
-
-   if engine.IsKeyDown(INJAN_KEY_LEFT):
-      vel.x -= 1 * speedModifier
-
-   if engine.IsKeyDown(INJAN_KEY_DOWN):
-      vel.y -= 1 * speedModifier
-
-   if engine.IsKeyDown(INJAN_KEY_RIGHT):
-      vel.x += 1 * speedModifier
-
-   # Player Position update
-   player.set_vel(vel)
+   # Player Update
+   player.handle_input()
+   player.update_position(dt)
 
     #Final Draw
    engine.Draw()
