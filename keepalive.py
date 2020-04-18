@@ -1,5 +1,6 @@
 import sys, platform, random
 from src.gameobjs.player import Player
+from src.gameobjs.asteroid import Asteroid
 from src.Injan import Injan
 from src.InjanStructures import Vector2, Vector3
 from src.InjanKeycodes import *
@@ -23,14 +24,17 @@ cameraZ = 0
 print("Camera Setup Complete!")
 
 #print("Create Background...")
-#Set background
+#todo Set background
 #print("Background created!")
 
 print("Creating Game Objects...")
 
 player = Player(engine)
 
-#create asteroid/exit portal spawner here
+#temporary, just to test asteroids move correctly. spawner will construct this eventually
+asteroid = Asteroid(engine, pos=Vector3(10.0, 15.0, 0.0), weight=4)
+
+#todo create asteroid/exit portal spawner here
 
 print("Game Objects created!")
 
@@ -39,13 +43,15 @@ print("Commence funtime...")
 while engine.IsWindowOpen():
    dt = engine.Update()
 
-   # update spawner -> spawn new asteroid if needed
+   # todo: update spawner -> spawn new asteroid if needed
 
-   # update all asteroid positions
+   # todo: update all asteroid positions
+   asteroid.update_position(dt)
 
    player.handle_input()
    player.update_position(dt)
 
+   # todo: implement the following
    # detect collisions 
       # if player and asteroid collide
          # player dies -> game ends/life lost (?)
