@@ -42,3 +42,14 @@ class Asteroid:
 
    def get_position(self):
       return self.pos
+
+   def has_collided_with(self, asteroid):
+      asteroidPos = asteroid.get_position()
+      diffY = abs(self.pos.y - asteroidPos.y)
+
+      return diffY < 30 #?
+
+   def land_above(self, asteroid):
+      self.pos.y = asteroid.pos.y + 32
+      self.falling = False 
+

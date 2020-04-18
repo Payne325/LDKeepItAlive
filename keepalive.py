@@ -31,7 +31,8 @@ print("Creating Game Objects...")
 player = Player(engine)
 
 #temporary, just to test asteroids move correctly. spawner will construct this eventually
-asteroid = Asteroid(engine, pos=Vector3(320.0, 500.0, 0.0), weight=128)
+asteroid1 = Asteroid(engine, pos=Vector3(320.0, 500.0, 0.0), weight=128)
+asteroid2 = Asteroid(engine, pos=Vector3(320.0, 800.0, 0.0), weight=128)
 
 #todo create asteroid/exit portal spawner here
 
@@ -48,21 +49,22 @@ while engine.IsWindowOpen() and player_alive:
    # todo: update spawner -> spawn new asteroid if needed
 
    # todo: update all asteroid positions
-   asteroid.update_position(dt)
+   asteroid1.update_position(dt)
+   asteroid2.update_position(dt)
    player.update_position(dt)
    
    # todo: implement the following
    # detect collisions 
-   if player.has_collided_with(asteroid):
-      if asteroid.can_hurt_player():
+   if player.has_collided_with(asteroid1):
+      if asteroid1.can_hurt_player():
          print("You died!")
          player_alive = False
          continue
       else:
-         player.place_next_to_collision(asteroid)
+         player.place_next_to_collision(asteroid1)
 
-   #if falling asteroid and stopped asteroid collide
-      # falling asteroid stops movement and replaces texture
+   if asteroid2.has_collided_with(asteroid1):
+      asteroid2.land_above(asteroid1)
 
    # if asteroid and exit portal collide
       # delete asteroid
@@ -73,7 +75,8 @@ while engine.IsWindowOpen() and player_alive:
       # up difficulty somehow (more asteroids, faster asteroids, bigger 'tall enough' value?) 
 
    player.update_sprite()
-   asteroid.update_sprite()
+   asteroid1.update_sprite()
+   asteroid2.update_sprite()
    engine.Draw()
 
 # Add some code to tidy up all memory if needed
