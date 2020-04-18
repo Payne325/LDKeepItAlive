@@ -39,6 +39,8 @@ print("Game Objects created!")
 
 print("Commence funtime...")
 
+floor_height = 0
+
 while engine.IsWindowOpen():
    dt = engine.Update()
 
@@ -55,11 +57,8 @@ while engine.IsWindowOpen():
       # if player and asteroid collide
          # player dies -> game ends/life lost (?)
 
-      # if asteroid and ground collide
-         # increase floor height
-         
-         # if floor height is tall enough
-            # spawn exit portal
+      #if falling asteroid and stopped asteroid collide
+         # falling asteroid stops movement and replaces texture
 
       # if asteroid and exit portal collide
          # delete asteroid
