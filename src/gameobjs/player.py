@@ -7,12 +7,12 @@ class Player:
       self.pos = Vector3(0.0, 0.0, 0.0)
 
       spriteID = engine.CreateTexture("assets/sprites/player.png", Vector2(0, 0), Vector2(32, 64))
-      self.sprite = engine.CreateSprite(Vector3(0, 0, 1.0), Vector2(32 ,64), spriteID)
+      self.sprite = engine.CreateSprite(Vector3(0, 32, 1.0), Vector2(32 ,64), spriteID)
       self.sprite.SetDrawable(True)
 
       self.jump_force = 0
       self.weight = 64.0
-      self.floor_height = 0
+      self.floor_height = 16
       self.jumping = False
       self.move_left = False
       self.move_right = False
@@ -24,7 +24,7 @@ class Player:
       self.floor_height = height
 
    def update_sprite(self):
-      self.sprite.SetPosition(Vector3(self.pos.x, self.pos.y, 1.0))
+      self.sprite.SetPosition(Vector3(self.pos.x, self.pos.y + 16, 1.0))
 
    def update_position(self, dt):
       speedModifier = 100 * dt
@@ -33,7 +33,7 @@ class Player:
       if self.engine.IsKeyDown(INJAN_KEY_UP):
          if self.jumping == False:
             self.jumping = True
-            self.jump_force = 640
+            self.jump_force = 940
 
       falling_force = 0
       if self.jumping:
@@ -68,10 +68,23 @@ class Player:
       diffX = abs(self.pos.x - asteroidPos.x)
       diffY = abs(self.pos.y - asteroidPos.y)
 
-      return diffX < 30 and diffY < 30
+      return diffX < 30 and diffY < 46
 
    def place_next_to_collision(self, asteroid):
       vecBetween = self.pos - asteroid.get_position()
       #vecBetween = vecBetween.get_normalised()
 
-      self.pos += vecBetween
+      if self.vel.y != 0:
+         if vecBetween.y >= 0 and vecBetween.y < 46:
+            self.pos.y = asteroid.get_position().y + 46
+
+
+      if self.has_collided_with(asteroid) == False:
+         return
+
+      if vecBetween.x <= 0 and vecBetween.x > -30:
+         self.pos.x = asteroid.get_position().x - 30
+      elif vecBetween.x >= 0 and vecBetween.x < 30:
+         self.pos.x = asteroid.get_position().x + 30
+
+

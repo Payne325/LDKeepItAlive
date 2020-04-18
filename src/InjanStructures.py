@@ -21,6 +21,9 @@ class Vector3(ctypes.Structure):
    def __isub__(self, rhs):
       return Vector3(self.x - rhs.x, self.y - rhs.y, self.z - rhs.z)
 
+   def __add__(self, rhs):
+      return Vector3(self.x + rhs.x, self.y + rhs.y, self.z + rhs.z)
+
    def __sub__(self, rhs):
       return Vector3(self.x - rhs.x, self.y - rhs.y, self.z - rhs.z)
 

@@ -15,7 +15,7 @@ print("Engine Loaded!")
 print("Setting up Camera...")
 
 camera = engine.CreateOrthographicCamera(-1.0, 1.0)
-camera.Move(Vector3(-50, -50, 0))
+camera.Move(Vector3(0, 0, 0))
 cameraX = 0
 cameraY = 0
 cameraZ = 0

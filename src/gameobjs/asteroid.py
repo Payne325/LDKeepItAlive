@@ -10,11 +10,11 @@ class Asteroid:
       self.falling = True
 
       falling_spriteID = engine.CreateTexture("assets/sprites/asteroid.png", Vector2(0, 0), Vector2(32, 32))
-      self.falling_sprite = engine.CreateSprite(Vector3(0, 0, 1.0), Vector2(32 ,32), falling_spriteID)
+      self.falling_sprite = engine.CreateSprite(Vector3(0, 16, 1.0), Vector2(32 ,32), falling_spriteID)
       self.falling_sprite.SetDrawable(True)
 
       stopped_spriteID = engine.CreateTexture("assets/sprites/asteroid_broken.png", Vector2(0, 0), Vector2(32, 32))
-      self.stopped_sprite = engine.CreateSprite(Vector3(0, 0, 1.0), Vector2(32 ,32), stopped_spriteID)
+      self.stopped_sprite = engine.CreateSprite(Vector3(0, 16, 1.0), Vector2(32 ,32), stopped_spriteID)
       self.stopped_sprite.SetDrawable(False)
 
    def update_floor_height(self, height):
@@ -31,11 +31,11 @@ class Asteroid:
 
    def update_sprite(self):
       if self.falling:
-         self.falling_sprite.SetPosition(Vector3(self.pos.x, self.pos.y, 1.0))
+         self.falling_sprite.SetPosition(Vector3(self.pos.x, self.pos.y + 16, 1.0))
       else:
          self.falling_sprite.SetDrawable(False)
          self.stopped_sprite.SetDrawable(True)
-         self.stopped_sprite.SetPosition(Vector3(self.pos.x, self.pos.y, 1.0))
+         self.stopped_sprite.SetPosition(Vector3(self.pos.x, self.pos.y + 16, 1.0))
 
    def can_hurt_player(self):
       return self.falling
