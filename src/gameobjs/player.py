@@ -11,7 +11,7 @@ class Player:
       self.sprite.SetDrawable(True)
 
       self.jump_force = 0
-      self.weight = 2.0
+      self.weight = 64.0
       self.floor_height = 0
       self.jumping = False
       self.move_left = False
@@ -24,16 +24,16 @@ class Player:
       self.floor_height = height
 
    def update_sprite(self):
-      self.sprite.SetPosition(Vector3(self.pos.x * 32, self.pos.y * 32, 1.0))
+      self.sprite.SetPosition(Vector3(self.pos.x, self.pos.y, 1.0))
 
    def update_position(self, dt):
-      speedModifier = 10 * dt
+      speedModifier = 100 * dt
       self.vel = Vector3(0.0, 0.0, 0.0)
 
       if self.engine.IsKeyDown(INJAN_KEY_UP):
          if self.jumping == False:
             self.jumping = True
-            self.jump_force = 20
+            self.jump_force = 640
 
       falling_force = 0
       if self.jumping:
@@ -68,10 +68,10 @@ class Player:
       diffX = abs(self.pos.x - asteroidPos.x)
       diffY = abs(self.pos.y - asteroidPos.y)
 
-      return diffX < 0.9 and diffY < 0.9
+      return diffX < 30 and diffY < 30
 
    def place_next_to_collision(self, asteroid):
       vecBetween = self.pos - asteroid.get_position()
-      vecBetween = vecBetween.get_normalised()
-      
+      #vecBetween = vecBetween.get_normalised()
+
       self.pos += vecBetween

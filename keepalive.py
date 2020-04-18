@@ -31,7 +31,7 @@ print("Creating Game Objects...")
 player = Player(engine)
 
 #temporary, just to test asteroids move correctly. spawner will construct this eventually
-asteroid = Asteroid(engine, pos=Vector3(10.0, 15.0, 0.0), weight=4)
+asteroid = Asteroid(engine, pos=Vector3(320.0, 500.0, 0.0), weight=128)
 
 #todo create asteroid/exit portal spawner here
 
