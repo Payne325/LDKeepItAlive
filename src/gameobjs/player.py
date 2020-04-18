@@ -40,8 +40,9 @@ class Player:
          falling_force = self.jump_force * dt
          self.jump_force -= self.weight
 
-      elif self.pos.y > self.floor_height: # if falling but not ending jump animation
-         falling_force -= self.weight * dt
+      elif self.pos.y > self.floor_height: # if falling but not ending jump animation      
+         falling_force = self.jump_force * dt
+         self.jump_force -= self.weight
 
       self.vel.y = falling_force
 
@@ -61,6 +62,7 @@ class Player:
       if self.pos.y <= self.floor_height:
          self.jumping = False
          self.pos.y = self.floor_height
+         self.jump_force = 0
 
    def has_collided_with(self, asteroid):
       asteroidPos = asteroid.get_position()
@@ -77,7 +79,8 @@ class Player:
       if self.vel.y != 0:
          if vecBetween.y >= 0 and vecBetween.y < 46:
             self.pos.y = asteroid.get_position().y + 46
-
+            self.jumping = False
+            self.jump_force = 0
 
       if self.has_collided_with(asteroid) == False:
          return
