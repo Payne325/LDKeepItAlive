@@ -22,27 +22,46 @@ cameraZ = 0
 
 print("Camera Setup Complete!")
 
-print("Create Background...")
+#print("Create Background...")
 #Set background
-print("Background created!")
+#print("Background created!")
 
 print("Creating Game Objects...")
 
 player = Player(engine)
 
+#create asteroid/exit portal spawner here
+
 print("Game Objects created!")
 
 print("Commence funtime...")
 
-timer = 0
-
 while engine.IsWindowOpen():
    dt = engine.Update()
-   timer += dt
 
-   # Player Update
+   # update spawner -> spawn new asteroid if needed
+
+   # update all asteroid positions
+
    player.handle_input()
    player.update_position(dt)
 
-    #Final Draw
+   # detect collisions 
+      # if player and asteroid collide
+         # player dies -> game ends/life lost (?)
+
+      # if asteroid and ground collide
+         # increase floor height
+         
+         # if floor height is tall enough
+            # spawn exit portal
+
+      # if asteroid and exit portal collide
+         # delete asteroid
+
+      # if player and exit portal collide
+         # reset game
+         # increment level counter
+         # up difficulty somehow (more asteroids, faster asteroids, bigger 'tall enough' value?) 
+
    engine.Draw()
