@@ -119,7 +119,7 @@ floor_height = 0
 player_alive = True
 level_num = 1
 
-debug_mode = True
+debug_mode = False
 debug_skip = False
 debug_key = False
 
