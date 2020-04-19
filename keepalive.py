@@ -18,6 +18,29 @@ pygame.init()
 
 print("Engine Loaded!")
 
+print("Creating overlay...")
+textSpriteID = engine.CreateTexture("assets/sprites/LevelText.png", Vector2(0, 0), Vector2(64, 32))
+textSprite = engine.CreateSprite(Vector3(705, 550, 1.0), Vector2(64 ,32), textSpriteID)
+textSprite.SetDrawable(True)
+
+levelnumSpriteID1 = engine.CreateTexture("assets/sprites/LevelText-1.png", Vector2(0, 0), Vector2(32, 32))
+levelnumSpriteID2 = engine.CreateTexture("assets/sprites/LevelText-2.png", Vector2(0, 0), Vector2(32, 32))
+levelnumSpriteID3 = engine.CreateTexture("assets/sprites/LevelText-3.png", Vector2(0, 0), Vector2(32, 32))
+
+levelNumSprites = []
+
+levelNumSprites.append(engine.CreateSprite(Vector3(750, 550, 0.0), Vector2(32 ,32), levelnumSpriteID1))
+levelNumSprites.append(engine.CreateSprite(Vector3(750, 550, 0.0), Vector2(32 ,32), levelnumSpriteID2))
+levelNumSprites.append(engine.CreateSprite(Vector3(750, 550, 0.0), Vector2(32 ,32), levelnumSpriteID3))
+
+for i, sprite in enumerate(levelNumSprites):
+   if i == 0:
+      sprite.SetDrawable(True)
+   else:
+      sprite.SetDrawable(False)
+
+print("Overlay created!")
+
 print("Setting up Camera...")
 
 camera = engine.CreateOrthographicCamera(-1.0, 1.0)
@@ -38,15 +61,9 @@ player = Player(engine)
 
 asteroid_spawner = AsteroidSpawner(engine)
 
-#temporary, just to test asteroids move correctly. spawner will construct this eventually
-#asteroid1 = Asteroid(engine, pos=Vector3(320.0, 500.0, 0.0), weight=128)
-#asteroid2 = Asteroid(engine, pos=Vector3(320.0, 800.0, 0.0), weight=128)
-
 falling_asteroids = []
 stopped_asteroids = []
 portal = Portal(engine)
-
-#todo create exit portal spawner here
 
 print("Game Objects created!")
 
@@ -63,8 +80,6 @@ while engine.IsWindowOpen() and player_alive:
    spawned_asteroids = asteroid_spawner.Spawn(dt)
    for asteroid in spawned_asteroids:
       falling_asteroids.append(asteroid)
-
-   # TODO: SPAWN EXIT PORTAL IF NEEDED
 
    # UPDATE POSITIONS
    for i, asteroid in enumerate(falling_asteroids):
@@ -132,7 +147,7 @@ while engine.IsWindowOpen() and player_alive:
 
    
 
-   # todo: if asteroid and exit portal collide
+   # todo: if stopped asteroid and exit portal collide
       # delete asteroid
 
    # END OF LEVEL COMPUTATION
@@ -153,6 +168,15 @@ while engine.IsWindowOpen() and player_alive:
       portal.move_to_random_position()
 
       asteroid_spawner.NextLevel()
+
+      for i, sprite in enumerate(levelNumSprites):
+         val = min(level_num, 3)
+
+         if i == val - 1:
+            sprite.SetDrawable(True)
+         else:
+            sprite.SetDrawable(False)
+
       continue
 
 
