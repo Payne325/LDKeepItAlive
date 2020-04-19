@@ -17,6 +17,8 @@ def death_func():
          
    print("You died!")
 
+num_lives = 3 # cant be less than 1
+
 print("Loading Engine...")
 
 engine = Injan()
@@ -48,6 +50,17 @@ for i, sprite in enumerate(levelNumSprites):
    else:
       sprite.SetDrawable(False)
 
+textSpriteID2 = engine.CreateTexture("assets/sprites/LivesText.png", Vector2(0, 0), Vector2(64, 32))
+textSprite2 = engine.CreateSprite(Vector3(25, 550, 1.0), Vector2(64 ,32), textSpriteID2)
+textSprite2.SetDrawable(True)
+
+lifeSpriteID = engine.CreateTexture("assets/sprites/life1.png", Vector2(0, 0), Vector2(32, 32))
+lifeSprites = []
+for i in range(0, 3):
+   xPos = (i * 33) + 89
+   lifeSprites.append(engine.CreateSprite(Vector3(xPos, 550, 1.0), Vector2(32 ,32), lifeSpriteID))
+   lifeSprites[i].SetDrawable(True)
+
 print("Overlay created!")
 
 print("Setting up Camera...")
@@ -65,8 +78,6 @@ print("Camera Setup Complete!")
 #print("Background created!")
 
 print("Creating Game Objects...")
-
-num_lives = 3
 
 player = Player(engine)
 
@@ -104,7 +115,9 @@ while engine.IsWindowOpen() and player_alive:
       if player.has_collided_with(asteroid):
          
          num_lives -= 1
-         if num_lives < 1:
+         lifeSprites[num_lives].SetDrawable(False)
+
+         if num_lives == 0:
             player_alive = False
             death_func()
 

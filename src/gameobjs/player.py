@@ -40,10 +40,11 @@ class Player:
       self.Jumping = False
       self.jump_force = 64.0
       self.playedSFX = False
-      self.sprite.SetDrawable(True)
       self.move_left = False
       self.move_right = False
       self.vel = Vector3(0.0, 0.0, 0.0)
+      self.sprite.SetDrawable(True)
+      self.sprite2.SetDrawable(False)
 
    def update_sprite(self):
       self.sprite.SetPosition(Vector3(self.pos.x + 16, self.pos.y + 32, 1.0))
