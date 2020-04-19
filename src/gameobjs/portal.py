@@ -43,3 +43,11 @@ class Portal:
    def playSFX(self):
       self.levelEndSFX.play()
       self.playedSFX = True
+
+   def has_collided_with(self, asteroid):
+      asteroidPos = asteroid.get_position()
+      
+      diffX = abs(self.pos.x - asteroidPos.x)
+      diffY = abs(self.pos.y - asteroidPos.y)
+
+      return diffX < 30 and diffY < 30

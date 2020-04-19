@@ -166,8 +166,15 @@ while engine.IsWindowOpen() and player_alive:
    for idx in reversed(removal_indices):
       falling_asteroids.pop(idx)
 
-   # todo: if stopped asteroid and exit portal collide
-      # delete asteroid
+   # STOPPED ASTEROIDS AND PORTAL
+   removal_indices = []
+   for i, asteroid in enumerate(stopped_asteroids):
+      if portal.has_collided_with(asteroid):
+         removal_indices.append(i)
+         asteroid.stop_drawing()
+   
+   for idx in reversed(removal_indices):
+      stopped_asteroids.pop(idx)
 
    # END OF LEVEL COMPUTATION
    if portal.player_has_reached_portal(player):
