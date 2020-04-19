@@ -10,6 +10,7 @@ print("Loading Engine...")
 
 engine = Injan()
 engine.Initialise()
+engine.SetWindowSizeLimits(Vector2(800, 600), Vector2(800, 600))
 
 print("Engine Loaded!")
 

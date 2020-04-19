@@ -10,6 +10,7 @@ class Injan:
          self.injanDLL = ctypes.cdll.LoadLibrary("engine/Injan")
          
          self.initialise = self.injanDLL.Initialise
+         self.setWindowSizeLimits = self.injanDLL.SetWindowSizeLimits
          self.isWindowOpen = self.injanDLL.IsWindowOpen
          self.isKeyDown = self.injanDLL.IsKeyDown
          self.draw = self.injanDLL.Draw
@@ -33,6 +34,7 @@ class Injan:
          self.getPathPointAt = self.injanDLL.GetPathPointAt
 
          self.isKeyDown.argtypes = [ctypes.c_int]
+         self.setWindowSizeLimits.argtypes = [Vector2, Vector2]
          self.createPerspectiveCamera.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_double]
          self.createOrthographicCamera.argtypes = [ctypes.c_double, ctypes.c_double]
          self.setCameraPosition.argtypes = [ctypes.c_int, Vector3]
@@ -71,6 +73,12 @@ class Injan:
 
       self.initialise()
 
+
+   # SetWindowSizeLimits Function
+   def SetWindowSizeLimits(self, min, max):
+      if self.loaded == False: return
+
+      self.setWindowSizeLimits(min, max)
 
    # IsWindowOpen Function
    def IsWindowOpen(self):
