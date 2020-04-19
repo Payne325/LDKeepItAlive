@@ -92,6 +92,16 @@ class Player:
          self.pos.y = self.floor_height
          self.jump_force = 0
 
+      # ensure the player doesnt go out of bounds
+      if self.pos.x < 0.0:
+         self.pos.x = 0
+
+      if self.pos.x > 750:
+         self.pos.x = 750
+
+      if self.pos.y > 600:
+         self.pos.y = 600
+
    def has_collided_with(self, asteroid):
       asteroidPos = asteroid.get_position()
 
