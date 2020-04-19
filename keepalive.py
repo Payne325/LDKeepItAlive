@@ -91,6 +91,10 @@ print("Game Objects created!")
 
 print("Commence funtime...")
 
+pygame.mixer.music.load("assets/sfx/game_music.wav")
+pygame.mixer.music.set_volume(0.3)
+pygame.mixer.music.play(-1)
+
 floor_height = 0
 player_alive = True
 level_num = 1
