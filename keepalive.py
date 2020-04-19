@@ -185,7 +185,7 @@ while engine.IsWindowOpen() and player_alive:
 
       falling_asteroids = []
       stopped_asteroids = []
-      portal.move_to_random_position()
+      portal.adjust_for_new_level()
 
       asteroid_spawner.NextLevel()
 
