@@ -7,7 +7,7 @@ class AsteroidSpawner:
    def __init__(self, engine):
       self.engine = engine
 
-      self.spawnRate = 5
+      self.spawnRate = .5
       self.weight = 128
       
       self.weightIncrement = 5
