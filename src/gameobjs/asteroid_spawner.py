@@ -10,7 +10,7 @@ class AsteroidSpawner:
       self.spawnRate = .5
       self.weight = 128
       
-      self.weightIncrement = 16
+      self.weightIncrement = 24
       self.spawnRateIncrement = .01
       self.timer = 0
 
@@ -28,6 +28,6 @@ class AsteroidSpawner:
          seedVal = time.time_ns()
          seed(seedVal)
          xPos = uniform(0.0, 750.0)
-         asteroids.append(Asteroid(self.engine, Vector3(xPos, 500.0, 0.0), self.weight))
+         asteroids.append(Asteroid(self.engine, Vector3(xPos, 568.0, 0.0), self.weight))
 
       return asteroids
