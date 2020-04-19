@@ -8,12 +8,17 @@ class Portal:
    def __init__(self, engine):
       self.levelNum = 1
       self.pos = self.__generate_random_position()
+      self.timer = 0
       self.collidedWithPlayer = False
       self.levelEndSFX = mixer.Sound("assets/sfx/level_up.wav")
       self.playedSFX = False
       spriteID = engine.CreateTexture("assets/sprites/portal.png", Vector2(0, 0), Vector2(32, 32))
       self.sprite = engine.CreateSprite(Vector3(self.pos.x + 16, self.pos.y + 16, 1.0), Vector2(32 ,32), spriteID)
       self.sprite.SetDrawable(True)
+
+      spriteID2 = engine.CreateTexture("assets/sprites/portal2.png", Vector2(0, 0), Vector2(32, 32))
+      self.sprite2 = engine.CreateSprite(Vector3(self.pos.x + 16, self.pos.y + 16, 1.0), Vector2(32 ,32), spriteID2)
+      self.sprite2.SetDrawable(True)
 
    def __generate_random_position(self):
       seedVal = time.time_ns()
@@ -39,6 +44,7 @@ class Portal:
       self.levelNum += 1
       self.pos = self.__generate_random_position()
       self.sprite.SetPosition(Vector3(self.pos.x + 16, self.pos.y + 16, 1.0))
+      self.sprite2.SetPosition(Vector3(self.pos.x + 16, self.pos.y + 16, 1.0))
 
    def playSFX(self):
       self.levelEndSFX.play()
@@ -51,3 +57,15 @@ class Portal:
       diffY = abs(self.pos.y - asteroidPos.y)
 
       return diffX < 30 and diffY < 30
+
+   def update_sprite(self, dt):
+      self.timer += dt
+
+      if self.timer <  0.5:
+         self.sprite.SetDrawable(True)
+         self.sprite2.SetDrawable(False)
+      elif  self.timer <  1:
+         self.sprite.SetDrawable(False)
+         self.sprite2.SetDrawable(True)
+      else:
+         self.timer = 0
