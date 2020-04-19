@@ -8,6 +8,15 @@ from src.InjanStructures import Vector2, Vector3
 from src.InjanKeycodes import *
 import pygame
 
+def death_func():
+   deathSound = pygame.mixer.Sound("assets/sfx/death_music.wav")
+   deathSound.play()
+   while True:
+      if not pygame.mixer.get_busy():
+         break
+         
+   print("You died!")
+
 print("Loading Engine...")
 
 engine = Injan()
@@ -57,6 +66,8 @@ print("Camera Setup Complete!")
 
 print("Creating Game Objects...")
 
+num_lives = 3
+
 player = Player(engine)
 
 asteroid_spawner = AsteroidSpawner(engine)
@@ -91,15 +102,12 @@ while engine.IsWindowOpen() and player_alive:
    # PLAYER AND FALLING ASTEROIDS -> DEATH
    for asteroid in falling_asteroids:
       if player.has_collided_with(asteroid):
-         deathSound = pygame.mixer.Sound("assets/sfx/death_music.wav")
-         deathSound.play()
-         while True:
-            if not pygame.mixer.get_busy():
-               print("Broke!")
-               break
          
-         print("You died!")
-         player_alive = False
+         num_lives -= 1
+         if num_lives < 1:
+            player_alive = False
+            death_func()
+
          player.reset()
 
          for asteroid in falling_asteroids:
@@ -145,8 +153,6 @@ while engine.IsWindowOpen() and player_alive:
    for idx in reversed(removal_indices):
       falling_asteroids.pop(idx)
 
-   
-
    # todo: if stopped asteroid and exit portal collide
       # delete asteroid
 
@@ -156,6 +162,8 @@ while engine.IsWindowOpen() and player_alive:
 
       portal.playSFX()
 
+      player.reset()
+
       for asteroid in falling_asteroids:
          asteroid.stop_drawing()
 
@@ -164,7 +172,6 @@ while engine.IsWindowOpen() and player_alive:
 
       falling_asteroids = []
       stopped_asteroids = []
-      player.reset()
       portal.move_to_random_position()
 
       asteroid_spawner.NextLevel()
