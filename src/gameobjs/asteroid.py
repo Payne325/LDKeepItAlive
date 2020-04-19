@@ -10,7 +10,7 @@ class Asteroid:
       self.floor_height = 0
       self.falling = True
 
-      self.explosionSFX = "assets/sfx/Explosion.wav"
+      self.explosionSFX = mixer.Sound("assets/sfx/Explosion.wav")
       self.playedSFX = False
 
       falling_spriteID = engine.CreateTexture("assets/sprites/asteroid.png", Vector2(0, 0), Vector2(32, 32))
@@ -65,7 +65,6 @@ class Asteroid:
 
    def playSFX(self):
       if not self.falling and not self.playedSFX:
-         mixer.music.load(self.explosionSFX)
-         mixer.music.play(0)
+         self.explosionSFX.play()
          self.playedSFX = True
 

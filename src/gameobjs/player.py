@@ -16,7 +16,7 @@ class Player:
       self.sprite2 = engine.CreateSprite(Vector3(0, 32, 1.0), Vector2(32 ,64), spriteID2)
       self.sprite2.SetDrawable(False)
 
-      self.jumpSFX = "assets/sfx/Jump.wav"
+      self.jumpSFX = mixer.Sound("assets/sfx/Jump.wav")
       self.playedSFX = False
 
       self.jump_force = 0
@@ -35,8 +35,15 @@ class Player:
    def get_position(self):
       return self.pos
 
-   def set_position(self, pos):
-      self.pos = pos
+   def reset(self):
+      self.pos = Vector3(0.0, 0.0, 0.0)
+      self.Jumping = False
+      self.jump_force = 64.0
+      self.playedSFX = False
+      self.sprite.SetDrawable(True)
+      self.move_left = False
+      self.move_right = False
+      self.vel = Vector3(0.0, 0.0, 0.0)
 
    def update_sprite(self):
       self.sprite.SetPosition(Vector3(self.pos.x + 16, self.pos.y + 32, 1.0))
@@ -113,8 +120,8 @@ class Player:
 
    def playSFX(self):
       if self.jumping and not self.playedSFX:
-         mixer.music.load(self.jumpSFX)
-         mixer.music.play(0)
+
+         self.jumpSFX.play()
          self.playedSFX = True
 
       if not self.jumping:

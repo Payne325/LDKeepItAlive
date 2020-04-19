@@ -8,6 +8,12 @@ from src.InjanStructures import Vector2, Vector3
 from src.InjanKeycodes import *
 import pygame
 
+def endgame_death():
+   pygame.mixer.music.load("assets/sfx/death_music.wav")
+   pygame.mixer.music.play(0)
+   print("You died!")
+
+
 print("Loading Engine...")
 
 engine = Injan()
@@ -76,7 +82,7 @@ while engine.IsWindowOpen() and player_alive:
    # PLAYER AND FALLING ASTEROIDS
    for asteroid in falling_asteroids:
       if player.has_collided_with(asteroid):
-         print("You died!")
+         endgame_death()
          player_alive = False
          continue
 
@@ -120,6 +126,9 @@ while engine.IsWindowOpen() and player_alive:
    # END OF LEVEL COMPUTATION
    if portal.player_has_reached_portal(player):
       level_num += 1
+
+      portal.playSFX()
+
       for asteroid in falling_asteroids:
          asteroid.stop_drawing()
 
@@ -128,9 +137,10 @@ while engine.IsWindowOpen() and player_alive:
 
       falling_asteroids = []
       stopped_asteroids = []
-      player.set_position(Vector3(0.0, 0.0, 0.0))
+      player.reset()
 
       asteroid_spawner.NextLevel()
+      continue
 
 
    # UPDATE SPRITES AND DRAW
@@ -148,8 +158,8 @@ while engine.IsWindowOpen() and player_alive:
    player.playSFX()
 
    # this is kinda annoying but w/e fuck you its a game jam
-   for asteroid in stopped_asteroids:
-      asteroid.playSFX()
+   #for asteroid in stopped_asteroids:
+      #asteroid.playSFX()
    
 
 # Add some code to tidy up all memory if needed

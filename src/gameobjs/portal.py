@@ -6,7 +6,7 @@ class Portal:
    def __init__(self, engine, pos):
       self.pos = pos
       self.collidedWithPlayer = False
-      self.levelEndSFX = "" #none made rn
+      self.levelEndSFX = mixer.Sound("assets/sfx/level_up.wav")
       self.playedSFX = False
 
       spriteID = engine.CreateTexture("assets/sprites/portal.png", Vector2(0, 0), Vector2(32, 32))
@@ -23,7 +23,5 @@ class Portal:
       return self.collidedWithPlayer
 
    def playSFX(self):
-      if self.collidedWithPlayer and not self.playedSFX:
-         mixer.music.load(self.levelEndSFX)
-         mixer.music.play(0)
-         self.playedSFX = True
+      self.levelEndSFX.play()
+      self.playedSFX = True
