@@ -44,6 +44,10 @@ levelNumSprites.append(engine.CreateSprite(Vector3(750, 550, 0.0), Vector2(32 ,3
 levelNumSprites.append(engine.CreateSprite(Vector3(750, 550, 0.0), Vector2(32 ,32), levelnumSpriteID2))
 levelNumSprites.append(engine.CreateSprite(Vector3(750, 550, 0.0), Vector2(32 ,32), levelnumSpriteID3))
 
+backgroundTexture = engine.CreateTexture("assets/sprites/background.png", Vector2(0, 0), Vector2(800, 600))
+backgroundSprite  = engine.CreateSprite(Vector3(400, 300, 0.0), Vector2(800, 600), backgroundTexture)
+backgroundSprite.SetDrawable(True)
+
 for i, sprite in enumerate(levelNumSprites):
    if i == 0:
       sprite.SetDrawable(True)
