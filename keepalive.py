@@ -1,6 +1,7 @@
 import sys, platform, random
 from src.gameobjs.player import Player
 from src.gameobjs.asteroid import Asteroid
+from src.gameobjs.asteroid_spawner import AsteroidSpawner
 from src.Injan import Injan
 from src.InjanStructures import Vector2, Vector3
 from src.InjanKeycodes import *
@@ -30,14 +31,16 @@ print("Creating Game Objects...")
 
 player = Player(engine)
 
-#temporary, just to test asteroids move correctly. spawner will construct this eventually
-asteroid1 = Asteroid(engine, pos=Vector3(320.0, 500.0, 0.0), weight=128)
-asteroid2 = Asteroid(engine, pos=Vector3(320.0, 800.0, 0.0), weight=128)
+asteroid_spawner = AsteroidSpawner(engine)
 
-falling_asteroids = [asteroid1, asteroid2]
+#temporary, just to test asteroids move correctly. spawner will construct this eventually
+#asteroid1 = Asteroid(engine, pos=Vector3(320.0, 500.0, 0.0), weight=128)
+#asteroid2 = Asteroid(engine, pos=Vector3(320.0, 800.0, 0.0), weight=128)
+
+falling_asteroids = []
 stopped_asteroids = []
 
-#todo create asteroid/exit portal spawner here
+#todo create exit portal spawner here
 
 print("Game Objects created!")
 
@@ -49,54 +52,78 @@ player_alive = True
 while engine.IsWindowOpen() and player_alive:
    dt = engine.Update()
 
-   # todo: update spawner -> spawn new asteroid if needed
-   new_stopped_asteroids = []
+   # SPAWN NEW ASTEROIDS IF NEEDED
+   spawned_asteroids = asteroid_spawner.Spawn(dt)
+   for asteroid in spawned_asteroids:
+      falling_asteroids.append(asteroid)
+
+   # TODO: SPAWN EXIT PORTAL IF NEEDED
+
+   # UPDATE POSITIONS
    for i, asteroid in enumerate(falling_asteroids):
-      asteroid.update_position(dt)
-      
-      if not asteroid.can_hurt_player():
-         new_stopped_asteroids.append(i)
-
-   for i in reversed(new_stopped_asteroids):
-      stopped_asteroids.append(falling_asteroids[i])
-      falling_asteroids.pop(i)
-
-   
-
-   new_stopped_asteroids = []
-   for falling_asteroid in falling_asteroids:
-      for i, stopped_asteroid in enumerate(stopped_asteroids):
-         if falling_asteroid.has_collided_with(stopped_asteroid):
-            falling_asteroid.land_above(stopped_asteroid)
-            new_stopped_asteroids.append(i)
-
-   for i in reversed(new_stopped_asteroids):
-      stopped_asteroids.append(falling_asteroids[i])
-      falling_asteroids.pop(i)
+       asteroid.update_position(dt)
 
    player.update_position(dt)
-   
+
+   # RESOLVE COLLISIONS
+   # PLAYER AND FALLING ASTEROIDS
    for asteroid in falling_asteroids:
       if player.has_collided_with(asteroid):
          print("You died!")
          player_alive = False
          continue
-   
+
+   # PLAYER AND STOPPED ASTEROIDS
    for asteroid in stopped_asteroids:
       if player.has_collided_with(asteroid):
          player.place_next_to_collision(asteroid)
 
-   # if asteroid and exit portal collide
+   # FALLING ASTEROIDS AND THE GROUND
+   removal_indices = []
+   for i, asteroid in enumerate(falling_asteroids):
+      if not asteroid.can_hurt_player():
+         stopped_asteroids.append(asteroid)
+         removal_indices.append(i)
+
+   for idx in reversed(removal_indices):
+      falling_asteroids.pop(idx)
+
+   # FALLING ASTEROIDS AND STOPPED ASTEROIDS
+   removal_indices = []
+   new_stopped_asteroids = []
+
+   for i, falling_asteroid in enumerate(falling_asteroids):
+      for stopped_asteroid in stopped_asteroids:
+         if falling_asteroid.has_collided_with(stopped_asteroid):
+            falling_asteroid.land_above(stopped_asteroid)
+            removal_indices.append(i)
+            new_stopped_asteroids.append(falling_asteroid)
+
+   for asteroid in new_stopped_asteroids:
+      stopped_asteroids.append(asteroid)
+
+   for idx in reversed(removal_indices):
+      falling_asteroids.pop(idx)
+
+   
+
+   # todo: if asteroid and exit portal collide
       # delete asteroid
 
-   # if player and exit portal collide
+   # todo: if player and exit portal collide
       # reset game
       # increment level counter
       # up difficulty somehow (more asteroids, faster asteroids, bigger 'tall enough' value?) 
 
+   # UPDATE SPRITES AND DRAW
    player.update_sprite()
-   asteroid1.update_sprite()
-   asteroid2.update_sprite()
+
+   for asteroid in falling_asteroids:
+      asteroid.update_sprite()
+
+   for asteroid in stopped_asteroids:
+      asteroid.update_sprite()
+
    engine.Draw()
 
 # Add some code to tidy up all memory if needed

@@ -57,7 +57,7 @@ class Player:
          self.vel.x -= 1 * speedModifier
          self.sprite2.SetDrawable(True)
          self.sprite.SetDrawable(False)
-
+         
       if self.engine.IsKeyDown(INJAN_KEY_RIGHT):
          self.move_left = False
          self.move_right = True
