@@ -1,5 +1,7 @@
 from src.gameobjs.asteroid import Asteroid
 from src.InjanStructures import Vector3
+from random import seed, uniform
+import time
 
 class AsteroidSpawner:
    def __init__(self, engine):
@@ -22,6 +24,10 @@ class AsteroidSpawner:
       asteroids = []
       if self.timer >= self.spawnRate:
          self.timer = 0
-         asteroids.append(Asteroid(self.engine, Vector3(320.0, 500.0, 0.0), self.weight))
+
+         seedVal = time.time_ns()
+         seed(seedVal)
+         xPos = uniform(0.0, 750.0)
+         asteroids.append(Asteroid(self.engine, Vector3(xPos, 500.0, 0.0), self.weight))
 
       return asteroids
