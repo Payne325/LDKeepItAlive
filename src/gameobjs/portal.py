@@ -25,7 +25,7 @@ class Portal:
       seed(seedVal)
       xPos = uniform(0.0, 750.0)
 
-      yUpperBound = min(500, (self.levelNum * .2) * 500)
+      yUpperBound = min(450, (self.levelNum * .2) * 450)
       yLowerBound = yUpperBound * .5
       yPos = uniform(yLowerBound, yUpperBound)
 
