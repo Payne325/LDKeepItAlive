@@ -9,13 +9,19 @@ class Asteroid:
       self.weight = weight
       self.floor_height = 0
       self.falling = True
+      self.timer = 0
 
       self.explosionSFX = mixer.Sound("assets/sfx/Explosion.wav")
       self.playedSFX = False
 
-      falling_spriteID = engine.CreateTexture("assets/sprites/asteroid.png", Vector2(0, 0), Vector2(32, 32))
-      self.falling_sprite = engine.CreateSprite(Vector3(0, 16, 1.0), Vector2(32 ,32), falling_spriteID)
-      self.falling_sprite.SetDrawable(True)
+      self.spriteFlip = True
+      falling_spriteID1 = engine.CreateTexture("assets/sprites/flame-asteroid-1.png", Vector2(0, 0), Vector2(32, 32))
+      self.falling_sprite1 = engine.CreateSprite(Vector3(0, 16, 1.0), Vector2(32 ,32), falling_spriteID1)
+      self.falling_sprite1.SetDrawable(True)
+
+      falling_spriteID2 = engine.CreateTexture("assets/sprites/flame-asteroid-2.png", Vector2(0, 0), Vector2(32, 32))
+      self.falling_sprite2 = engine.CreateSprite(Vector3(0, 16, 1.0), Vector2(32 ,32), falling_spriteID2)
+      self.falling_sprite2.SetDrawable(False)
 
       stopped_spriteID = engine.CreateTexture("assets/sprites/asteroid_broken.png", Vector2(0, 0), Vector2(32, 32))
       self.stopped_sprite = engine.CreateSprite(Vector3(0, 16, 1.0), Vector2(32 ,32), stopped_spriteID)
@@ -33,16 +39,30 @@ class Asteroid:
             self.pos.y = self.floor_height
             self.falling = False    
 
-   def update_sprite(self):
+   def update_sprite(self, dt):
+      self.timer += dt
       if self.falling:
-         self.falling_sprite.SetPosition(Vector3(self.pos.x + 16, self.pos.y + 16, 1.0))
+         if self.timer > .25:
+            self.spriteFlip = not self.spriteFlip
+            self.timer = 0
+
+         if self.spriteFlip:
+            self.falling_sprite1.SetPosition(Vector3(self.pos.x + 16, self.pos.y + 16, 1.0))
+            self.falling_sprite1.SetDrawable(True)
+            self.falling_sprite2.SetDrawable(False)
+         else:
+            self.falling_sprite2.SetPosition(Vector3(self.pos.x + 16, self.pos.y + 16, 1.0))
+            self.falling_sprite2.SetDrawable(True)
+            self.falling_sprite1.SetDrawable(False)
       else:
-         self.falling_sprite.SetDrawable(False)
+         self.falling_sprite1.SetDrawable(False)
+         self.falling_sprite2.SetDrawable(False)
          self.stopped_sprite.SetDrawable(True)
          self.stopped_sprite.SetPosition(Vector3(self.pos.x + 16, self.pos.y + 16, 1.0))
 
    def stop_drawing(self):
-      self.falling_sprite.SetDrawable(False)
+      self.falling_sprite1.SetDrawable(False)
+      self.falling_sprite2.SetDrawable(False)
       self.stopped_sprite.SetDrawable(False)
 
    def can_hurt_player(self):

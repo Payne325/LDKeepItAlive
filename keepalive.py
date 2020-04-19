@@ -184,10 +184,10 @@ while engine.IsWindowOpen() and player_alive:
    player.update_sprite()
 
    for asteroid in falling_asteroids:
-      asteroid.update_sprite()
+      asteroid.update_sprite(dt)
 
    for asteroid in stopped_asteroids:
-      asteroid.update_sprite()
+      asteroid.update_sprite(dt)
 
    engine.Draw()
 
