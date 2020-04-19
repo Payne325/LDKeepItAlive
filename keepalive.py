@@ -8,13 +8,6 @@ from src.InjanStructures import Vector2, Vector3
 from src.InjanKeycodes import *
 import pygame
 
-def endgame_death():
-   pygame.mixer.music.load("assets/sfx/death_music.wav")
-   pygame.mixer.music.play(0)
-   print("You died!")
-   
-
-
 print("Loading Engine...")
 
 engine = Injan()
@@ -51,7 +44,7 @@ asteroid_spawner = AsteroidSpawner(engine)
 
 falling_asteroids = []
 stopped_asteroids = []
-portal = Portal(engine, Vector3(320.0, 200, 0.0))
+portal = Portal(engine)
 
 #todo create exit portal spawner here
 
@@ -157,6 +150,7 @@ while engine.IsWindowOpen() and player_alive:
       falling_asteroids = []
       stopped_asteroids = []
       player.reset()
+      portal.move_to_random_position()
 
       asteroid_spawner.NextLevel()
       continue
