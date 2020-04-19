@@ -2,6 +2,7 @@ import sys, platform, random
 from src.gameobjs.player import Player
 from src.gameobjs.asteroid import Asteroid
 from src.gameobjs.asteroid_spawner import AsteroidSpawner
+from src.gameobjs.portal import Portal
 from src.Injan import Injan
 from src.InjanStructures import Vector2, Vector3
 from src.InjanKeycodes import *
@@ -43,6 +44,7 @@ asteroid_spawner = AsteroidSpawner(engine)
 
 falling_asteroids = []
 stopped_asteroids = []
+portal = Portal(engine, Vector3(320.0, 200, 0.0))
 
 #todo create exit portal spawner here
 
@@ -52,6 +54,7 @@ print("Commence funtime...")
 
 floor_height = 0
 player_alive = True
+level_num = 1
 
 while engine.IsWindowOpen() and player_alive:
    dt = engine.Update()
@@ -114,10 +117,21 @@ while engine.IsWindowOpen() and player_alive:
    # todo: if asteroid and exit portal collide
       # delete asteroid
 
-   # todo: if player and exit portal collide
-      # reset game
-      # increment level counter
-      # up difficulty somehow (more asteroids, faster asteroids, bigger 'tall enough' value?) 
+   # END OF LEVEL COMPUTATION
+   if portal.player_has_reached_portal(player):
+      level_num += 1
+      for asteroid in falling_asteroids:
+         asteroid.stop_drawing()
+
+      for asteroid in stopped_asteroids:
+         asteroid.stop_drawing()
+
+      falling_asteroids = []
+      stopped_asteroids = []
+      player.set_position(Vector3(0.0, 0.0, 0.0))
+
+      asteroid_spawner.NextLevel()
+
 
    # UPDATE SPRITES AND DRAW
    player.update_sprite()

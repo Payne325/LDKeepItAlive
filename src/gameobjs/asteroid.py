@@ -41,6 +41,10 @@ class Asteroid:
          self.stopped_sprite.SetDrawable(True)
          self.stopped_sprite.SetPosition(Vector3(self.pos.x + 16, self.pos.y + 16, 1.0))
 
+   def stop_drawing(self):
+      self.falling_sprite.SetDrawable(False)
+      self.stopped_sprite.SetDrawable(False)
+
    def can_hurt_player(self):
       return self.falling
 

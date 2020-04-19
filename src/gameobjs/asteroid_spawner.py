@@ -10,12 +10,12 @@ class AsteroidSpawner:
       self.spawnRate = .5
       self.weight = 128
       
-      self.weightIncrement = 5
-      self.spawnRateIncrement = 50
+      self.weightIncrement = 16
+      self.spawnRateIncrement = .01
       self.timer = 0
 
    def NextLevel(self):
-      self.spawnRate += self.spawnRateIncrement
+      self.spawnRate -= self.spawnRateIncrement
       self.weight += self.weightIncrement
 
    def Spawn(self, dt):      

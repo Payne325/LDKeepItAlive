@@ -32,6 +32,12 @@ class Player:
    def update_floor_height(self, height):
       self.floor_height = height
 
+   def get_position(self):
+      return self.pos
+
+   def set_position(self, pos):
+      self.pos = pos
+
    def update_sprite(self):
       self.sprite.SetPosition(Vector3(self.pos.x + 16, self.pos.y + 32, 1.0))
       self.sprite2.SetPosition(Vector3(self.pos.x + 16, self.pos.y + 32, 1.0))
