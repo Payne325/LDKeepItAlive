@@ -1,5 +1,7 @@
 from src.InjanStructures import *
 from src.InjanKeycodes import *
+from pygame import mixer
+import asyncio
 
 class Player:
    def __init__(self, engine):
@@ -13,6 +15,9 @@ class Player:
 
       self.sprite2 = engine.CreateSprite(Vector3(0, 32, 1.0), Vector2(32 ,64), spriteID2)
       self.sprite2.SetDrawable(False)
+
+      self.jumpSFX = "assets/sfx/Jump.wav"
+      self.playedSFX = False
 
       self.jump_force = 0
       self.weight = 64.0
@@ -100,3 +105,11 @@ class Player:
          self.pos.x = asteroid.get_position().x + 30
 
 
+   def playSFX(self):
+      if self.jumping and not self.playedSFX:
+         mixer.music.load(self.jumpSFX)
+         mixer.music.play(0)
+         self.playedSFX = True
+
+      if not self.jumping:
+         self.playedSFX = False

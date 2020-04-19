@@ -5,11 +5,14 @@ from src.gameobjs.asteroid_spawner import AsteroidSpawner
 from src.Injan import Injan
 from src.InjanStructures import Vector2, Vector3
 from src.InjanKeycodes import *
+import pygame
 
 print("Loading Engine...")
 
 engine = Injan()
 engine.Initialise()
+
+pygame.init()
 
 print("Engine Loaded!")
 
@@ -125,5 +128,9 @@ while engine.IsWindowOpen() and player_alive:
       asteroid.update_sprite()
 
    engine.Draw()
+
+   # SFX
+   player.playSFX()
+   
 
 # Add some code to tidy up all memory if needed
