@@ -34,28 +34,44 @@ textSpriteID = engine.CreateTexture("assets/sprites/LevelText.png", Vector2(0, 0
 textSprite = engine.CreateSprite(Vector3(705, 550, 1.0), Vector2(64 ,32), textSpriteID)
 textSprite.SetDrawable(True)
 
+levelnumSpriteID0 = engine.CreateTexture("assets/sprites/LevelText-0.png", Vector2(0, 0), Vector2(32, 32))
 levelnumSpriteID1 = engine.CreateTexture("assets/sprites/LevelText-1.png", Vector2(0, 0), Vector2(32, 32))
 levelnumSpriteID2 = engine.CreateTexture("assets/sprites/LevelText-2.png", Vector2(0, 0), Vector2(32, 32))
 levelnumSpriteID3 = engine.CreateTexture("assets/sprites/LevelText-3.png", Vector2(0, 0), Vector2(32, 32))
+levelnumSpriteID4 = engine.CreateTexture("assets/sprites/LevelText-4.png", Vector2(0, 0), Vector2(32, 32))
+levelnumSpriteID5 = engine.CreateTexture("assets/sprites/LevelText-5.png", Vector2(0, 0), Vector2(32, 32))
+levelnumSpriteID6 = engine.CreateTexture("assets/sprites/LevelText-6.png", Vector2(0, 0), Vector2(32, 32))
+levelnumSpriteID7 = engine.CreateTexture("assets/sprites/LevelText-7.png", Vector2(0, 0), Vector2(32, 32))
+levelnumSpriteID8 = engine.CreateTexture("assets/sprites/LevelText-8.png", Vector2(0, 0), Vector2(32, 32))
+levelnumSpriteID9 = engine.CreateTexture("assets/sprites/LevelText-9.png", Vector2(0, 0), Vector2(32, 32))
+
+levelNumSpritePos = Vector3(750, 550, 0.0)
 
 levelNumSprites = []
 
+levelNumSprites.append(engine.CreateSprite(Vector3(750, 550, 0.0), Vector2(32 ,32), levelnumSpriteID0))
 levelNumSprites.append(engine.CreateSprite(Vector3(750, 550, 0.0), Vector2(32 ,32), levelnumSpriteID1))
 levelNumSprites.append(engine.CreateSprite(Vector3(750, 550, 0.0), Vector2(32 ,32), levelnumSpriteID2))
 levelNumSprites.append(engine.CreateSprite(Vector3(750, 550, 0.0), Vector2(32 ,32), levelnumSpriteID3))
+levelNumSprites.append(engine.CreateSprite(Vector3(750, 550, 0.0), Vector2(32 ,32), levelnumSpriteID4))
+levelNumSprites.append(engine.CreateSprite(Vector3(750, 550, 0.0), Vector2(32 ,32), levelnumSpriteID5))
+levelNumSprites.append(engine.CreateSprite(Vector3(750, 550, 0.0), Vector2(32 ,32), levelnumSpriteID6))
+levelNumSprites.append(engine.CreateSprite(Vector3(750, 550, 0.0), Vector2(32 ,32), levelnumSpriteID7))
+levelNumSprites.append(engine.CreateSprite(Vector3(750, 550, 0.0), Vector2(32 ,32), levelnumSpriteID8))
+levelNumSprites.append(engine.CreateSprite(Vector3(750, 550, 0.0), Vector2(32 ,32), levelnumSpriteID9))
 
 backgroundTexture = engine.CreateTexture("assets/sprites/background.png", Vector2(0, 0), Vector2(800, 600))
 backgroundSprite  = engine.CreateSprite(Vector3(400, 300, 0.0), Vector2(800, 600), backgroundTexture)
 backgroundSprite.SetDrawable(True)
 
 for i, sprite in enumerate(levelNumSprites):
-   if i == 0:
+   if i == 1:
       sprite.SetDrawable(True)
    else:
       sprite.SetDrawable(False)
 
 textSpriteID2 = engine.CreateTexture("assets/sprites/LivesText.png", Vector2(0, 0), Vector2(64, 32))
-textSprite2 = engine.CreateSprite(Vector3(25, 550, 1.0), Vector2(64 ,32), textSpriteID2)
+textSprite2 = engine.CreateSprite(Vector3(40, 550, 1.0), Vector2(64 ,32), textSpriteID2)
 textSprite2.SetDrawable(True)
 
 lifeSpriteID = engine.CreateTexture("assets/sprites/life1.png", Vector2(0, 0), Vector2(32, 32))
@@ -103,8 +119,21 @@ floor_height = 0
 player_alive = True
 level_num = 1
 
+debug_skip = False
+debug_key = False
+
 while engine.IsWindowOpen() and player_alive:
    dt = engine.Update()
+
+   # DEBUG
+
+   if engine.IsKeyDown(INJAN_KEY_W) and debug_key == False:
+      debug_skip = True
+      debug_key = True
+
+   if engine.IsKeyDown(INJAN_KEY_W) == False:
+      debug_key = False
+      debug_skip = False
 
    # SPAWN NEW ASTEROIDS IF NEEDED
    spawned_asteroids = asteroid_spawner.Spawn(dt)
@@ -185,7 +214,8 @@ while engine.IsWindowOpen() and player_alive:
       stopped_asteroids.pop(idx)
 
    # END OF LEVEL COMPUTATION
-   if portal.player_has_reached_portal(player):
+   if portal.player_has_reached_portal(player) or debug_skip:
+      debug_skip = False
       level_num += 1
 
       portal.playSFX()
@@ -204,13 +234,23 @@ while engine.IsWindowOpen() and player_alive:
 
       asteroid_spawner.NextLevel()
 
-      for i, sprite in enumerate(levelNumSprites):
-         val = min(level_num, 3)
+      for sprite in levelNumSprites:
+         sprite.SetDrawable(False)
 
-         if i == val - 1:
-            sprite.SetDrawable(True)
-         else:
-            sprite.SetDrawable(False)
+      level_num_str = str(level_num)
+
+      characterCount = 0
+
+      for i in level_num_str:
+         val = int(i)
+
+         charPos = Vector3(levelNumSpritePos.x, levelNumSpritePos.y, levelNumSpritePos.z)
+         charPos.x += characterCount * 8
+
+         levelNumSprites[val].SetPosition(charPos)
+         levelNumSprites[val].SetDrawable(True)
+
+         characterCount += 1
 
       continue
 
