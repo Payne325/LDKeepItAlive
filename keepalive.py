@@ -217,6 +217,7 @@ while engine.IsWindowOpen() and player_alive:
 
    # UPDATE SPRITES AND DRAW
    player.update_sprite()
+   portal.update_sprite(dt)
 
    for asteroid in falling_asteroids:
       asteroid.update_sprite(dt)
