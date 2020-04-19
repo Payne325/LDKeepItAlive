@@ -1,5 +1,6 @@
 from src.InjanStructures import *
 from src.InjanKeycodes import *
+from pygame import mixer
 
 class Asteroid:
    def __init__(self, engine, pos, weight):
@@ -8,6 +9,9 @@ class Asteroid:
       self.weight = weight
       self.floor_height = 0
       self.falling = True
+
+      self.explosionSFX = "assets/sfx/Explosion.wav"
+      self.playedSFX = False
 
       falling_spriteID = engine.CreateTexture("assets/sprites/asteroid.png", Vector2(0, 0), Vector2(32, 32))
       self.falling_sprite = engine.CreateSprite(Vector3(0, 16, 1.0), Vector2(32 ,32), falling_spriteID)
@@ -53,5 +57,11 @@ class Asteroid:
 
    def land_above(self, asteroid):
       self.pos.y = asteroid.pos.y + 32
-      self.falling = False 
+      self.falling = False
+
+   def playSFX(self):
+      if not self.falling and not self.playedSFX:
+         mixer.music.load(self.explosionSFX)
+         mixer.music.play(0)
+         self.playedSFX = True
 

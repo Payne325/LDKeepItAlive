@@ -131,6 +131,10 @@ while engine.IsWindowOpen() and player_alive:
 
    # SFX
    player.playSFX()
+
+   # this is kinda annoying but w/e fuck you its a game jam
+   for asteroid in stopped_asteroids:
+      asteroid.playSFX()
    
 
 # Add some code to tidy up all memory if needed
