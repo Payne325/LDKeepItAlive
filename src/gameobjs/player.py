@@ -54,7 +54,7 @@ class Player:
       speedModifier = 100 * dt
       self.vel = Vector3(0.0, 0.0, 0.0)
 
-      if self.engine.IsKeyDown(INJAN_KEY_UP):
+      if self.engine.IsKeyDown(INJAN_KEY_UP) or self.engine.IsKeyDown(INJAN_KEY_W):
          if self.jumping == False:
             self.jumping = True
             self.jump_force = 740
@@ -70,14 +70,14 @@ class Player:
 
       self.vel.y = falling_force
 
-      if self.engine.IsKeyDown(INJAN_KEY_LEFT):
+      if self.engine.IsKeyDown(INJAN_KEY_LEFT) or self.engine.IsKeyDown(INJAN_KEY_A):
          self.move_right = False
          self.move_left = True
          self.vel.x -= 1 * speedModifier
          self.sprite2.SetDrawable(True)
          self.sprite.SetDrawable(False)
          
-      if self.engine.IsKeyDown(INJAN_KEY_RIGHT):
+      if self.engine.IsKeyDown(INJAN_KEY_RIGHT) or self.engine.IsKeyDown(INJAN_KEY_D):
          self.move_left = False
          self.move_right = True
          self.vel.x += 1 * speedModifier

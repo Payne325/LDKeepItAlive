@@ -119,21 +119,23 @@ floor_height = 0
 player_alive = True
 level_num = 1
 
+debug_mode = True
 debug_skip = False
 debug_key = False
 
 while engine.IsWindowOpen() and player_alive:
    dt = engine.Update()
 
+
    # DEBUG
+   if debug_mode:
+      if engine.IsKeyDown(INJAN_KEY_S) and debug_key == False:
+         debug_skip = True
+         debug_key = True
 
-   if engine.IsKeyDown(INJAN_KEY_W) and debug_key == False:
-      debug_skip = True
-      debug_key = True
-
-   if engine.IsKeyDown(INJAN_KEY_W) == False:
-      debug_key = False
-      debug_skip = False
+      if engine.IsKeyDown(INJAN_KEY_S) == False:
+         debug_key = False
+         debug_skip = False
 
    # SPAWN NEW ASTEROIDS IF NEEDED
    spawned_asteroids = asteroid_spawner.Spawn(dt)
@@ -245,7 +247,7 @@ while engine.IsWindowOpen() and player_alive:
          val = int(i)
 
          charPos = Vector3(levelNumSpritePos.x, levelNumSpritePos.y, levelNumSpritePos.z)
-         charPos.x += characterCount * 8
+         charPos.x += characterCount * 12
 
          levelNumSprites[val].SetPosition(charPos)
          levelNumSprites[val].SetDrawable(True)
