@@ -12,6 +12,7 @@ def endgame_death():
    pygame.mixer.music.load("assets/sfx/death_music.wav")
    pygame.mixer.music.play(0)
    print("You died!")
+   
 
 
 print("Loading Engine...")
@@ -79,11 +80,29 @@ while engine.IsWindowOpen() and player_alive:
    player.update_position(dt)
 
    # RESOLVE COLLISIONS
-   # PLAYER AND FALLING ASTEROIDS
+   # PLAYER AND FALLING ASTEROIDS -> DEATH
    for asteroid in falling_asteroids:
       if player.has_collided_with(asteroid):
-         endgame_death()
+         deathSound = pygame.mixer.Sound("assets/sfx/death_music.wav")
+         deathSound.play()
+         while True:
+            if not pygame.mixer.get_busy():
+               print("Broke!")
+               break
+         
+         print("You died!")
          player_alive = False
+         player.reset()
+
+         for asteroid in falling_asteroids:
+            asteroid.stop_drawing()
+
+         for asteroid in stopped_asteroids:
+            asteroid.stop_drawing()
+
+         falling_asteroids = []
+         stopped_asteroids = []
+
          continue
 
    # PLAYER AND STOPPED ASTEROIDS
